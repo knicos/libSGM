@@ -62,12 +62,14 @@ namespace sgm {
 				sgm_engine = new SemiGlobalMatchingImpl<uint8_t, 64>();
 			else if (input_depth_bits_ == 8 && disparity_size_ == 128)
 				sgm_engine = new SemiGlobalMatchingImpl<uint8_t, 128>();
+			else if (input_depth_bits_ == 8 && disparity_size_ == 256)
+				sgm_engine = new SemiGlobalMatchingImpl<uint8_t, 256>();
 			else if (input_depth_bits_ == 16 && disparity_size_ == 64)
 				sgm_engine = new SemiGlobalMatchingImpl<uint16_t, 64>();
 			else if (input_depth_bits_ == 16 && disparity_size_ == 128)
 				sgm_engine = new SemiGlobalMatchingImpl<uint16_t, 128>();
 			else
-				throw std::logic_error("depth bits must be 8 or 16, and disparity size must be 64 or 128");
+				throw std::logic_error("depth bits must be 8 or 16, and disparity size must be 64, 128 or 256");
 
 			if (is_cuda_input(inout_type_)) {
 				this->d_src_left = NULL;
@@ -125,9 +127,9 @@ namespace sgm {
 			width_ = height_ = input_depth_bits_ = output_depth_bits_ = disparity_size_ = 0;
 			throw std::logic_error("depth bits must be 8 or 16");
 		}
-		if (disparity_size_ != 64 && disparity_size_ != 128) {
+		if (disparity_size_ != 64 && disparity_size_ != 128 && disparity_size_ != 256) {
 			width_ = height_ = input_depth_bits_ = output_depth_bits_ = disparity_size_ = 0;
-			throw std::logic_error("disparity size must be 64 or 128");
+			throw std::logic_error("disparity size must be 64, 128 or 256");
 		}
 		if (param.subpixel && output_depth_bits != 16) {
 			width_ = height_ = input_depth_bits_ = output_depth_bits_ = disparity_size_ = 0;
