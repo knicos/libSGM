@@ -32,9 +32,12 @@ namespace {
 			d >>= sgm::StereoSGM::SUBPIXEL_SHIFT;
 		}
 		int k = j - d;
-		if (mask == 0 || d <= 0 || (k >= 0 && k < width && abs(d_rightDisp[i * dst_pitch + k] - d) > 1)) {
-			// masked or left-right inconsistent pixel -> invalid
-			d_leftDisp[i * dst_pitch + j] = 0;
+		if (mask == 0 || d <= 0 || (k >= 0 && k < width)) {
+			int diff = abs(d_rightDisp[i * dst_pitch + k] - d);
+			if (diff > 1) {
+				// masked or left-right inconsistent pixel -> invalid
+				d_leftDisp[i * dst_pitch + j] = (256 << (sgm::StereoSGM::SUBPIXEL_SHIFT+1));
+			}
 		}
 	}
 }
